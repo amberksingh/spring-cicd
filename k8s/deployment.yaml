@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: spring-cicd
-          image: devamber/spring-cicd:4fb8b8e
+          image: devamber/spring-cicd:b596543
           ports:
             - containerPort: 8080
