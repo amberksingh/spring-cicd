@@ -56,12 +56,10 @@ jobs:
         sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }}|g" k8s/deployment.yaml
 
     - name: Commit and push updated deployment.yaml
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
         git add k8s/deployment.yaml
         git commit -m "Update image tag to ${{ env.SHORT_SHA }}"
         git push origin HEAD:main  
