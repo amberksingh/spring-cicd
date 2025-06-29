@@ -11,8 +11,8 @@ public class SpringCicdApplication {
 
 	@GetMapping("/welcome")
 	public String message() {
-		System.out.println("Spring ci-cd using github actions");
-		return "Spring ci-cd using github actions";
+		System.out.println("Spring ci-cd using github actions..");
+		return "Spring ci-cd using github actions..";
 	}
 
 	public static void main(String[] args) {
