@@ -51,7 +51,7 @@ jobs:
     - name: Push Docker Image with SHA tag
       run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }}
 
-    - name: Update deployment.yaml with new image tag
+    - name: Update deployment.yaml with new IMAGE tag
       run: |
         sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }}|g" k8s/deployment.yaml
 
