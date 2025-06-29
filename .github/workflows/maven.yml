@@ -35,11 +35,35 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build Docker Image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-cicd:latest .
+#    - name: Build Docker Image
+#      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-cicd:latest .
+#
+#    - name: Push Docker Image
+#      run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-cicd:latest
 
-    - name: Push Docker Image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-cicd:latest
+    - name: Set Git short SHA
+      id: vars
+      run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
+    - name: Build Docker Image with SHA tag
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }} .
+
+    - name: Push Docker Image with SHA tag
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }}
+
+    - name: Update deployment.yaml with new image tag
+      run: |
+        sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/spring-cicd:${{ env.SHORT_SHA }}|g" k8s/deployment.yaml
+
+    - name: Commit and push updated deployment.yaml
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add k8s/deployment.yaml
+        git commit -m "Update image tag to ${{ env.SHORT_SHA }}"
+        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main  
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
 #    - name: Update dependency graph
