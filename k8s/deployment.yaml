@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: spring-cicd-app
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: spring-cicd-app
