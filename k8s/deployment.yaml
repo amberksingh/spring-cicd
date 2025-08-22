@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: spring-cicd-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: spring-cicd-app
@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: spring-cicd
-          image: devamber/spring-cicd:0b4a8e3
+          image: devamber/spring-cicd:2.0
+          #imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
