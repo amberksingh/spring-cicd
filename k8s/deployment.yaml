@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: spring-cicd
-          image: devamber/spring-cicd:1.0
+          image: devamber/spring-cicd:3663ca0
           #imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
